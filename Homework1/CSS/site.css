@@ -95,6 +95,9 @@ h2{
     }
     .login-form{
         background-color: #fff;
+        border-bottom-left-radius:10px;
+        border-top-left-radius: 10px;
+        border-left: none;;
     }
     .input-field{
         background-color: #fff;
