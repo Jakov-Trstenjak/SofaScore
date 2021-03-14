@@ -2,25 +2,52 @@ module.exports = {
   /**
    * Returns an empty object without prototype. There is object creation type that creates object without prototype
    */
-  createPrototypelessObject() {},
+  createPrototypelessObject() {
+    return {};
+  },
 
   /**
    * Returns an object with prototype set to given `proto`.
    * @param {Object} proto Prototype object
    */
-  createObjectWithPrototype(proto) {},
+  createObjectWithPrototype(proto) {
+    var obj ={};
+    Object.setPrototypeOf(obj, proto);
+    return obj;
+
+  },
 
   /**
    * Returns an object with `value` property set to the given `value` and `getValue` method.
    * Be careful, if `value` changes, `getValue` should return changed `value`.
    * @param {any} value
    */
-  createObjectWithMethod(value) {},
+  createObjectWithMethod(value) {
+    let obj = {
+      value : value,
+      get getValue(){
+        return this.value;
+      }
+    }
+  },
 
   /**
    * Returns an object with the `getValue` and `setValue` methods, having `value` hidden from the outside.
    */
-  createEncapsulatedObject() {},
+  createEncapsulatedObject() {
+   
+    return  (function() {
+      function Object() {
+          this.setValue = function(value){
+            this.value = value;
+          };
+          this.getValue = function() {
+              return value;
+          };
+        }
+    }());
+
+  },
 
   /**
    * Returns the shallow copy of the given `obj`. HINT: This **operator** will be used later.
