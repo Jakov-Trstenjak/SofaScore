@@ -43,7 +43,7 @@ module.exports = {
     const obj = () => {
       let value = 0;
     
-      const getMilesDriven = () => value;
+      const getValue = () => value;
 
       const setValue = (value) => {
         return this.value = value;
