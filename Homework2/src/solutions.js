@@ -3,8 +3,9 @@ module.exports = {
    * Returns an empty object without prototype. There is object creation type that creates object without prototype
    */
   createPrototypelessObject() {
-    return {};
-  },
+    var obj ={};
+    Object.setPrototypeOf(obj, null);
+    return obj;  },
 
   /**
    * Returns an object with prototype set to given `proto`.
@@ -23,12 +24,15 @@ module.exports = {
    * @param {any} value
    */
   createObjectWithMethod(value) {
-    let obj = {
-      value : value,
-      get getValue(){
+    var object = {
+      value: value,
+      
+      getValue : function() {
         return this.value;
       }
-    }
+    };   
+    return object; 
+
   },
 
   /**
@@ -36,74 +40,97 @@ module.exports = {
    */
   createEncapsulatedObject() {
    
-    return  (function() {
-      function Object() {
-          this.setValue = function(value){
-            this.value = value;
-          };
-          this.getValue = function() {
-              return value;
-          };
-        }
-    }());
+    const obj = () => {
+      let value = 0;
+    
+      const getMilesDriven = () => value;
 
+      const setValue = (value) => {
+        return this.value = value;
+       };
+    }
+    return obj;
   },
 
   /**
    * Returns the shallow copy of the given `obj`. HINT: This **operator** will be used later.
    * @param {Object} obj
    */
-  shallowCopy(obj) {},
+  shallowCopy(obj) {
+    let newObject = Object.assign({}, obj);
+    return newObject;
+  },
 
   /**
    * Returns the deep copy of the given `obj`.
    * @param {Object} obj
    */
-  deepCopy(obj) {},
+  deepCopy(obj) {
+    const clone = JSON.parse(JSON.stringify(obj));
+    return clone;
+  },
 
   /**
    * Returns an array containing 2 elements which are
    * loosely equal, but strictly unequal.
    */
-  looselyTrue() {},
+  looselyTrue() {
+    return ["2",2];
+  },
 
   /**
    * Returns a string that is loosely equal to boolean `true`. This one is tricky :)
    */
-  stringLooselyEqualToTrue() {},
+  stringLooselyEqualToTrue() {
+    return "1"
+  },
 
   /**
    * Returns correct sum of a and b.
    */
-  safeSum(a, b) {},
+  safeSum(a, b) {
+    return parseFloat(a) + parseFloat(b);
+  },
 
   /**
    * Returns formatted string for the given date.
    * Format should be `{day}-{month}-{fullYear}` (all numbers).
    * @param {Date} date
    */
-  formatDate(date) {},
+  formatDate(date) {
+    return date.toString("dd-mm-yyyy");
+  },
 
   /**
    * Sorts the given `numberArray` in ascending order.
    * Use array `.sort` method. Sort is done in place so there is no need to return anything.
    * @param {number[]} numberArray
    */
-  sortNumberArray(numberArray) {},
+  sortNumberArray(numberArray) {
+     numberArray.sort((a, b) => a - b);
+  },
 
   /**
    * Multiplies all the elements in the array by 2 _in place_
    * (edits the given array) and returns it.
    * @param {number[]} numberArray
    */
-  multiplyArrayByTwo(numberArray) {},
+  multiplyArrayByTwo(numberArray) 
+  {
+    for(var i=0; i<numberArray.length; i++) 
+      numberArray[i] = numberArray[i] * 2;
+    
+    return numberArray;
+  },
 
   /**
    * Multiplies all the elements in the array by 2 and returns them
    * in a new array.
    * @param numberArray
    */
-  multiplyArrayByTwoNew(numberArray) {},
+  multiplyArrayByTwoNew(numberArray) {
+    return [... numberArray.map(function(number) { return number * 2; })];
+  },
 
   /**
    * Create two classes: `Person` and `Programmer`. `Programmer` class extends `Person`.
@@ -116,7 +143,33 @@ module.exports = {
    * @param {Function} callGetName
    * @param {Function} callGetLanguage
    */
-  classInheritance(callGetName, callGetLanguage) {},
+  classInheritance(callGetName, callGetLanguage) {
+    class Person {
+      constructor(name) {
+        this.name = name;
+        this.getName = this.getName.bind(this)
+
+      }
+    
+      getName() {
+        return this.name;
+      }
+    }
+
+    class Programmer extends Person{
+      constructor(name, language){
+          super(name);
+          this.language = language;
+          this.getLanguage = this.getLanguage.bind(this)
+
+      }
+
+      getLanguage(){
+        return this.language;
+      }
+    }
+    return {Person, Programmer};
+  },
 
   /**
    * EXTRA CREDIT TASK -> Closure trick with async. Async is not important here and has nothing to do with the solution.
