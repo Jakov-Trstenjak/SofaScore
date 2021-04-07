@@ -1,124 +1,48 @@
-import React from "react";
-import DisplayDog from "./DisplayDog";
+import React from 'react'
+import DisplayDog from './DisplayDog'
 
+class Dog extends React.Component {
+  constructor(props) {
+    super(props)
 
-class Dog extends React.Component{
-    constructor(props){
-        super(props);
+    this.state = {
+      dogs: {},
+    }
+  }
 
-        this.state = {
-            dogs : [],
-            dog : "Malinois",
-            imageUrl : "https:\/\/images.dog.ceo\/breeds\/malinois\/n02105162_4719.jpg",
-            allBreeds : {
-                "affenpinscher": [],
-                "african": [],
-                "airedale": [],
-                "akita": [],
-                "appenzeller": [],
-                "basenji": [],
-                "beagle": [],
-                "bluetick": [],
-                "borzoi": [],
-                "bouvier": [],
-                "boxer": [],
-                "brabancon": [],
-                "briard": [],
-                "cairn": [],
-                "chihuahua": [],
-                "chow": [],
-                "clumber": [],
-                "cockapoo": [],
-                "border collie": [],
-                "coonhound": [],
-                "cotondetulear": [],
-                "dachshund": [],
-                "dalmatian": [],
-                " great dane":[],
-                "dhole": [],
-                "dingo": [],
-                "doberman": [],
-                "entlebucher": [],
-                "eskimo": [],
-                "germanshepherd": [],
-                "groenendael": [],
-                "havanese": [],
-                "husky": [],
-                "keeshond": [],
-                "kelpie": [],
-                "komondor": [],
-                "kuvasz": [],
-                "labradoodle": [],
-                "labrador": [],
-                "leonberg": [],
-                "lhasa": [],
-                "malamute": [],
-                "malinois": [],
-                "maltese": [],
-                "mexicanhairless": [],
-                "mix": [],
-                "newfoundland": [],
-                "otterhound": [],
-                "papillon": [],
-                "pekinese": [],
-                "pembroke": [],
-                "pitbull": [],
-                "german pointer": [],
-                "pomeranian": [],
-                "pug": [],
-                "puggle": [],
-                "pyrenees": [],
-                "redbone": [],
-                "golden retriever": [],
-                "rottweiler": [],
-                "saluki": [],
-                "samoyed": [],
-                "schipperke": [],
-                "shiba": [],
-                "shihtzu": [],
-                "stbernard": [],
-                "vizsla": [],
-                "weimaraner": [],
-                "whippet": []
-            }
-        }
+  async getDog(input) {
+    const response = await fetch('https://dog.ceo/api/breed/' + input + '/images/random')
+
+    const data = await response.json()
+
+    let imageUrl = ''
+
+    if (data.status === 'success') {
+      imageUrl = data.message
     }
 
-    
-    constainsBreed(val) {
-        return this.state.allBreeds.some(item => val === item);
+    this.setState({ dogs: { ...this.state.dogs, [input]: imageUrl } })
+  }
+
+  componentDidMount() {
+    this.getDog(this.props.dog)
+  }
+
+  componentDidUpdate(props) {
+    if (props.dog !== this.props.dog) {
+      this.getDog(this.props.dog)
     }
+  }
 
-    searchInput  = event =>{
-        let input =  event.target.value;
+  render() {
+    const dogImg = this.state.dogs[this.props.dog]
 
-        if(this.constainsBreed(input)){
-            
-          this.setState({dog : input});     
-          this.setState(
-            { dogs: [...this.state.dogs, input] }
-          )
-
-
-          let request = fetch("https://dog.ceo/api/breed/"+input+"/images/random");
-
-          if(request.status == "success"){
-              this.setState({imageUrl : request.message});
-          }
-        }
-    }
-
-    render() {
-          return (
-            <div>
-              <DisplayDog
-                image={ this.imageUrl }
-                title={ this.dog } 
-                />
-            </div>
-          );
-      }
-    
+    return (
+      <div>
+        <DisplayDog image={dogImg} title={this.props.dog} />
+      </div>
+    )
+  }
 }
 
-export default Dog;
+export default Dog

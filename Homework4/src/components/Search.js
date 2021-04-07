@@ -11,8 +11,10 @@ class Search extends React.Component{
   }
 
   handleSubmit(event) {
-    alert('A breed was submitted: ' + this.state.value);
+    // alert('A breed was submitted: ' + this.state.value);
     event.preventDefault();
+
+    this.props.onSubmit(this.state.value)
   }
 
   handleChange(event) {
